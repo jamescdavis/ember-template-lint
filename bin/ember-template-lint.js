@@ -20,7 +20,6 @@ import { promisify } from 'node:util';
 import { parseArgv, getFilesToLint } from '../lib/helpers/cli.js';
 import printResults from '../lib/helpers/print-results.js';
 import processResults from '../lib/helpers/process-results.js';
-import removeExt from '../lib/helpers/remove-ext.js';
 import Linter from '../lib/linter.js';
 
 const readFile = promisify(fs.readFile);
@@ -36,16 +35,14 @@ const NOOP_CONSOLE = {
 async function buildLinterOptions(workingDir, filePath, filename = '', isReadingStdin) {
   if (isReadingStdin) {
     let filePath = filename;
-    let moduleId = removeExt(filePath);
     let source = await getStdin();
 
-    return { source, filePath, moduleId };
+    return { source, filePath };
   } else {
-    let moduleId = removeExt(filePath);
     let resolvedFilePath = path.resolve(workingDir, filePath);
     let source = await readFile(resolvedFilePath, { encoding: 'utf8' });
 
-    return { source, filePath, moduleId };
+    return { source, filePath };
   }
 }
 
