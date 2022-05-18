@@ -20,6 +20,7 @@ import { promisify } from 'node:util';
 import { parseArgv, getFilesToLint } from '../lib/helpers/cli.js';
 import printResults from '../lib/helpers/print-results.js';
 import processResults from '../lib/helpers/process-results.js';
+import removeExt from '../lib/helpers/remove-ext.js';
 import Linter from '../lib/linter.js';
 
 const readFile = promisify(fs.readFile);
@@ -31,10 +32,6 @@ const NOOP_CONSOLE = {
   warn: () => {},
   error: () => {},
 };
-
-function removeExt(filePath) {
-  return filePath.slice(0, -path.extname(filePath).length);
-}
 
 async function buildLinterOptions(workingDir, filePath, filename = '', isReadingStdin) {
   if (isReadingStdin) {
